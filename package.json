@@ -1,0 +1,10 @@
+{
+  "name": "socket-stream",
+  "version": "0.0.1",
+  "description": "stream app",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.1.0",
+    "fluent-ffmpeg": "^2.0.1"
+  }
+}
