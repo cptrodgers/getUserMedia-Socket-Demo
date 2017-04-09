@@ -8,11 +8,13 @@ app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-var outStream = fs.createWriteStream('/home/hien/Record-WebRTC/upload/test3.mp4');
+//Create a new file stream. You can write buffer data into this file.
+var outStream = fs.createWriteStream('/home/hien/Record-WebRTC/upload/test.mp4');
 
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('blob', function(data){
+      //You will received buffer data from browser client and you will write buffer to client.
       console.log(data);
       outStream.write(data);
    })
