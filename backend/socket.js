@@ -4,12 +4,8 @@ var io = require('socket.io')(http);
 var fs =require('fs');
 var ffmpeg =require('fluent-ffmpeg');
 
-app.get('/', function(req, res){
-  res.sendfile('index.html');
-});
-
 //Create a new file stream. You can write buffer data into this file.
-var outStream = fs.createWriteStream('/home/hien/Record-WebRTC/upload/test.mp4');
+var outStream = fs.createWriteStream('/home/rodgers/opensource/webRTC-Streaming/backend/upload/test.mp4');
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -21,6 +17,6 @@ io.on('connection', function(socket){
 });
 
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(4000, function(){
+  console.log('socket listening on *:4000');
 });

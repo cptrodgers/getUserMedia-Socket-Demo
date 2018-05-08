@@ -108,7 +108,7 @@
 
     // This code is adapted from
     // https://rawgit.com/Miguelao/demos/master/mediarecorder.html
-    var socket = io.connect();
+    var socket = io.connect('localhost:4444');
     var mediaSource = new MediaSource();
     mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
     var mediaRecorder;
