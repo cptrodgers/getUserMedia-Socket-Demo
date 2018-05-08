@@ -1,98 +1,46 @@
 # webRTC-Streaming ( Live stream get data from camera and mic by browser)
-* This is a very simple how to use WebRTC + WebSocket (socket.io libary) streaming video from mic + camera of device run browser. 
-* You have 2 part. 1 Client side and Server Side. You can custom it with your project + your database. 
-* I recommend you nginx-rtmp. This proxy help you save more time for problem streaming file from server to client with more api useful. 
 
-##Server side:
-At server side, we will received buffer data from client side (browser) and we will write it to a file you create from fs. It's so easy
+## Requirement for demo:
+
 ```
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var fs =require('fs');
-var ffmpeg =require('fluent-ffmpeg');
-
-app.get('/', function(req, res){
-  res.sendfile('index.html');
-});
-
-//Create a new file stream. You can write buffer data into this file.
-var outStream = fs.createWriteStream('/home/hien/Record-WebRTC/upload/test.mp4');
-
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('blob', function(data){
-      //You will received buffer data from browser client and you will write buffer to client.
-      console.log(data);
-      outStream.write(data);
-   })
-});
-
-
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
+node >= 6.x.x
 ```
 
+## Server :
 
-Client Size :
-Browser provide WebRTC help you can received data from device micro and camera. But it's write to a strore. You so hard and try hard to processing data of it. I find easy solution. And i using a example WebRTC of Sam Dutton about and config some code. Awesome. You have a solution for streaming video from browser :D.
+Idea: We will receive chunk data by websocket (socket.io) from client sent. Data will store in storage like ssd or memory for high perfomance.
 
-* I add libary socket.io (websocket) and connect to server side
 ```
-function handleDataAvailable(event) {
-  if (event.data && event.data.size > 0) {
-    recordedBlobs.push(event.data);
-    socket.emit('blob', event.data);
-  }
-}
-```
-* I split video + camera with 10ms and send it to server.
-```
-function startRecording() {
-  var options = { mimeType: 'video/webm', bitsPerSecond: 100000 };
-  recordedBlobs = [];
-  try {
-    mediaRecorder = new MediaRecorder(window.stream, options);
-  } catch (e0) {
-    console.log('Unable to create MediaRecorder with options Object: ', e0);
-    try {
-      options = { mimeType: 'video/webm,codecs=vp9', bitsPerSecond: 100000 };
-      mediaRecorder = new MediaRecorder(window.stream, options);
-    } catch (e1) {
-      console.log('Unable to create MediaRecorder with options Object: ', e1);
-      try {
-        options = 'video/vp8'; // Chrome 47
-        mediaRecorder = new MediaRecorder(window.stream, options);
-      } catch (e2) {
-        alert('MediaRecorder is not supported by this browser.\n\n' +
-          'Try Firefox 29 or later, or Chrome 47 or later, with Enable experimental Web Platform features enabled from chrome://flags.');
-        console.error('Exception while creating MediaRecorder:', e2);
-        return;
-      }
-    }
-  }
-  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-  recordButton.textContent = 'Stop Recording';
-  playButton.disabled = true;
-  downloadButton.disabled = true;
-  mediaRecorder.onstop = handleStop;
-  mediaRecorder.ondataavailable = handleDataAvailable;
-  mediaRecorder.start(10); // collect 10ms of data
-  console.log('MediaRecorder started', mediaRecorder);
-}
+#!bin/bash
+$ cd backend && npm i
+$ touch upload/test.mp4
+(change path in file socket.js - /home/rodgers/opensource/webRTC-Streaming/backend/upload/test.mp4)
+$ npm start
 ```
 
+## Client - Browser:
+
+Idea: Using Media Recorder Stream (https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API) for get resource from mic + camera by browser. Use websocket (socket.io) for send data to server.
+
+```
+#!bin/bash
+$ cd fronend && npm i
+$ npm start
+```
+
+Open localhost:3000 in browser and click start recording for start.
 
 * Awesome. Server received and you can open test video. :D. Hope this guide can help you. You can see full example client in index.html in source tree.
 
 ## Note:
-If you want streaming everything. You can thing more about latency of problem. Latency of write action > latency of read action. I recommend you read file streaming from server to client 0.95x. You can change 0.95x to other number. But i think it will make you have more 24fps. :D. 
+* If you want streaming everything. You can thing more about latency of problem. Latency of write action > latency of read action. I recommend you read file streaming from server to client 0.95x. You can change 0.95x to other number. But i think it will make you have more 24fps. :D. 
 
+* For high perfomance. We need store chunks data in memory of server. And read out will better than storage like ssd and hdd.
 
-## Contact
-This guide used source from 
-https://rawgit.com/Miguelao/demos/master/mediarecorder.html by  Sam Dutton
+* Now we have file recording from browser in upload directory. You can use ffmpeg for push video to RTMP server
 
-If you have any question about live streaming. You can ask me via email:
-cptrodgers@gmail.com. I will try research and support for you if i can. 
+* You also can setup nginx-rtmp with video on demands for directory uploads.
+
+## Contact:
+Hope you try to start. Because i have less time for maintain my idea. Because WebRTC maybe not fit for you.:3
+****
