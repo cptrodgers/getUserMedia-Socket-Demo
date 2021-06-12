@@ -33,14 +33,9 @@ Open localhost:3000 in browser and click start recording for start.
 * Awesome. Server received and you can open test video. :D. Hope this guide can help you. You can see full example client in index.html in source tree.
 
 ## Note:
-* If you want streaming everything. You can thing more about latency of problem. Latency of write action > latency of read action. I recommend you read file streaming from server to client 0.95x. You can change 0.95x to other number. But i think it will make you have more 24fps. :D. 
-
-* For high perfomance. We need store chunks data in memory of server. And read out will better than storage like ssd and hdd.
+* For high perfomance. We need store chunks data in memory of server.
 
 * Now we have file recording from browser in upload directory. You can use ffmpeg for push video to RTMP server
 
 * You also can setup nginx-rtmp with video on demands for directory uploads.
-
-## Contact:
-Hope you try to start. Because i have less time for maintain my idea. Because WebRTC maybe not fit for you.:3
 ****
