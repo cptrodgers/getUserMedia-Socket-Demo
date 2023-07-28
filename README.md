@@ -1,4 +1,4 @@
-# webRTC-Streaming ( Live stream get data from camera and mic by browser)
+# getUserMedia with Socket Demo
 
 ## Requirement for demo:
 
